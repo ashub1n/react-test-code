@@ -1,0 +1,28 @@
+import React from 'react';
+import { Route, Redirect, useLocation } from 'react-router-dom';
+//https://uk.reactjs.org/docs/hooks-reference.html
+const ProtectedRoute = ({ redirectTo='/login', authenticated, path, ...rest }) => {
+  
+  const location = useLocation();
+
+  //if (loading && !user) return <Loader />;
+
+  return authenticated ? (
+    <Route {...rest} path={path} />
+  ) : (
+    <Redirect
+      {...rest}
+      to={{
+        pathname:
+          location.state && location.state.from
+            ? location.state.from.pathname
+            : redirectTo,
+        state: {
+          from: location,
+        },
+      }}
+    />
+  );
+};
+
+export default ProtectedRoute;
